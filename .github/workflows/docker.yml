@@ -4,13 +4,13 @@ on:
   push:
     branches:
       - master
-
+      
 jobs:
   docker_build_push:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
+      - name: checkout code
         uses: actions/checkout@v2
 
       - name: Log in to Docker Hub
@@ -19,7 +19,8 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: Build Docker image
-        run: |
-          docker build -t jayesh1209/website:${{ github.run_number }} .
-          docker push jayesh1209/website:${{ github.run_number }}
+      - name: Build and push Docker image
+        run: 
+          cd client && make all TAG=${{ lastest }}
+          
+          cd ../server && make all TAG=${{ lastest }}
